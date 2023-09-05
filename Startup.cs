@@ -15,8 +15,6 @@ namespace Monopoli
             services.AddDbContext<MonoDB>(m =>
             {
                 m.UseSqlite("Data Source=Monopoli.db;");
-                //"Data Source=C:\\Inetpub\\vhosts\\reza.farabiran.ir\\wwwroot\\wwwroot\\Reza.db;"; 
-                //m.UseSqlServer("Data Source=DESKTOP;Initial Catalog=RezaDb;Integrated Security=True");
             });
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
