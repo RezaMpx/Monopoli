@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 
 namespace Monopoli
 {
+    // Models
     public class Info
     {
         public int Id { get; set; }
