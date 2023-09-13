@@ -41,6 +41,8 @@ namespace Monopoli
         public List<Info> Info { get; set; }
         public List<Turn> Turn { get; set; }
     }
+
+    // functions
     public static class Turns
     {
         public static string Log { get; set; }
