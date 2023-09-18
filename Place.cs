@@ -9,6 +9,6 @@ namespace Monopoli
     {
         public int Id { get; set; }
         public int Player { get; set; }
-        public int Tower { get; set; }
+        public int Tower { get; set; } // 4 Home & 1 Tower
     }
 }
