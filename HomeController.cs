@@ -208,5 +208,13 @@ namespace Monopoli
             return Content(r.Home);
         }
 
+
+        private string HomeCode(int prebuy, int pCount)
+        {
+            // create home code
+            var code = "";
+
+            return code;
+        }
     }
 }
