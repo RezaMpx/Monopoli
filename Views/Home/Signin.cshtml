@@ -1,0 +1,23 @@
+﻿@inject MonoDB mono
+@{
+}
+<link rel="stylesheet" href="~/start.css">
+<form id="form-login" method="post" action="/">
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert-error">
+            @if (ViewBag.Error == true)
+            {
+                <text>اسم‌هایی که انتخاب می‌کنید نباید طولانی باشن!</text>
+            }
+            else if (ViewBag.Error == false)
+            {
+                <text>نام باید وارد شود.</text>
+            }
+        </div>
+    }
+    <h3>نام کاربری</h3>
+    <input name="name" placeholder="نام کاربری" />
+    <input name="password" placeholder="رمزعبور" />
+    <input value="ثبت نام" />
+</form>

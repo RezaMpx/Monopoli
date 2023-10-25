@@ -1,0 +1,99 @@
+﻿@inject MonoDB mono
+@{
+    int c = 1;
+}
+<link rel="stylesheet" href="~/start.css">
+<form id="form-login" method="post" action="/">
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert-error">
+            @if (ViewBag.Error == true)
+            {
+            <text>اسم‌هایی که انتخاب می‌کنید نباید طولانی باشن!</text>
+            }
+            else if (ViewBag.Error == false)
+            {
+            <text>نام باید وارد شود.</text>
+            }
+        </div>
+    }
+    <h3>نام کاربری</h3>
+    <input id="name" name="name" placeholder="نام کاربری" />
+    <fieldset>
+        <legend>افرودن اتاق</legend>
+        <input name="room" placeholder="نام اتاق" />
+        <input name="password" placeholder="رمز (اختیاری)" />
+        <input id="add-room" type="submit" value="ساخت اتاق" />
+    </fieldset>
+</form>
+
+<span id="conn-state" class="conn-wait">🎲</span>
+@* ⚀ ⚁ ⚂ ⚃ ⚄ ⚅ ⏣ 🎲 🎮 ⭯*@
+<table>
+    <tr>
+        <th>ردیف</th>
+        <th>نام</th>
+        <th>بازیکنان</th>
+        <th>رمز</th>
+        <th>ورود</th>
+    </tr>
+    <tbody id="room-list">
+        @foreach (var item in mono.Rooms.ToList())
+        {
+            <tr>
+                <td>@(c++)</td>
+                <td>@item.RoomName</td>
+                <td>@item.Count/6</td>
+                <td><input type="password" name="password" /></td>
+                @if (item.IsStart)
+                {
+                    <td>بازی شروع شده</td>
+                }
+                else if(item.Count > 5)
+                {
+                    <td>اتاق پر شده</td>
+                }
+                else
+                {
+                    <td><a onclick="GoWaitPage('@item.Id')">ورود</a></td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $('#name').val('بازیکن ' + Math.round(Math.random() * 100))
+
+    function GoWaitPage(code) {
+        location = '/Home/Login/' + code + '?name=' + $('#name').val();
+    };
+    setInterval(function () {
+        $.ajax({
+            url: '/Home/Rooms',
+            data: {
+
+            },
+            contentType: "application/html; charset=utf-8",
+            error: function () {
+                $('#conn-state').text('خطا در برقراری ارتباط').removeClass().addClass('conn-err');
+            },
+            dataType: 'html',
+            success: function (result) {
+                txt = JSON.parse(result);
+                var list = '';
+                for (var i = 0; i < txt.length; i++) {
+                    list += '<tr><td>' + (i + 1) + '</td><td>' + txt[i].RoomName + '</td><td>'
+                        + txt[i].Count + '/6<td><input type="password" name="password" /></td><td>' +
+                        (txt[i].IsStart ? 'بازی شروع شده.' :
+                            '<a onclick="GoWaitPage(\'' + txt[i].Id + '\')">ورود</a>')
+                        + '</td></tr>';
+                }
+                $('#room-list').html(list);
+                $('#conn-state').text('متصل').removeClass().addClass('conn-ok');
+            },
+            type: 'POST'
+        });
+    }, 8000);
+</script>
+
+

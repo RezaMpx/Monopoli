@@ -1,0 +1,179 @@
+﻿@model Player
+@inject MonoDB mono
+@{
+    Player player = mono.Players.FirstOrDefault(m => m.Id == Model.Id);
+    int players = mono.Players.Where(m => m.Room == player.Room).Count();
+    Room room = mono.Rooms.FirstOrDefault(m => m.Id == player.Room);
+    AppendTurn.SetCount(room.Numder, players);
+    ViewBag.Game = true;
+}
+
+<div id="popup">
+    <div id="buy-place">
+        <div id="doc"></div>
+        <div id="act">
+            <div class="btn-buy-place" onclick="pp.Buy()" id="buy">خرید (B)</div>
+            <div class="btn-buy-place" onclick="pp.Auction()" id="auction">مزایده (A)</div>
+            <div class="btn-buy-place" onclick="pp.TradeBox(this)" id="transact">معامله</div>
+            <div class="btn-buy-place" onclick="pp.Loan()" id="loan">خرید اقساطی</div>
+            <div class="btn-buy-place" id="offer"><s>فروش پیشنهاد</s></div>
+        </div>
+    </div>
+    <div id="trade">
+        <div id="p-request">
+            <div id="p-r-name"></div>
+            <div id="pr-list"></div>
+            <input id="pri-range" type="range" min="" max="" value="0">
+            <a id="pri-val"></a>
+        </div>
+        <div class="btn">
+            <button id="startTrade">پیشنهاد</button>
+            <button onclick="pp.CloseTrade()" class="cancel">لغو</button>
+        </div>
+        <div id="p-target">
+            <div id="p-t-name"></div>
+            <div id="pt-list"></div>
+            <input id="pti-range" type="range" min="" max="" value="0">
+            <a id="pti-val"></a>
+        </div>
+    </div>
+    <div id="vip">
+        <span>شما هزینه 3 دور هتل را به مبلغ $300 پرداخت نمودید،</span>
+        <br><span>آیا می‌خواهید به هتل بروید؟</span>
+        <button onclick="pp.Vip()">بله، به هتل می‌روم. (V)</button>
+        <button class="cancel" onclick="pp.CloseVip()">خیر، هتل رو کنسل کن.</button>
+    </div>
+    <div id="hotel">
+        <span>از اقامت شما <span id="hotel-count">چند</span> دور باقی مانده،</span>
+        <br><span>آیا می‌خواهید هتل را ترک کنید؟</span>
+        <button onclick="pp.Hotel()">خیر، در هتل می‌مانم.</button>
+        <button class="cancel" onclick="pp.CancelHotel()">بله، به بازی می‌روم. (H)</button>
+    </div>
+    <div id="gh">
+        <p>
+            آیا مایلید یک دور در مسافرخانه بمانید؟
+            <br>مبلغ: <span id="gh-price"></span>
+        </p>
+        <button onclick="pp.GH()">در مسافرخانه می‌مانم. (G)</button>
+        <button onclick="pp.CancelGH()" class="cancel">به بازی ادامه می‌دهم.</button>
+    </div>
+    <div id="auct">
+        <div id="pauct-turn"></div>
+        <input id="auct-range" min="1" max="1" type="range">
+        <span id="max-auct">1</span>
+        <div id="catch-btn">
+            <button id="end-auct" class="btn-buy-place"></button>
+            <button id="exit-auct" class="btn-buy-place"></button>
+        </div>
+    </div>
+</div>
+<div class="main"></div>
+<div class="info"></div>
+<div id="doc-pattern">
+    <div class="color"></div>
+    <h4 class="name">لیبی</h4>
+    <div class="price-info">
+        <table>
+            <tr>
+                <td>اجاره</td>
+                <td class="rent">6$</td>
+            </tr>
+            <tr>
+                <td>جفت</td>
+                <td class="rent0">10$</td>
+            </tr>
+            <tr>
+                <td>1×<img src="~/assets/home.png"></td>
+                <td class="rent1">20$</td>
+            </tr>
+            <tr>
+                <td>2×<img src="~/assets/home.png"></td>
+                <td class="rent2">50$</td>
+            </tr>
+            <tr>
+                <td>3×<img src="~/assets/home.png"></td>
+                <td class="rent3">100$</td>
+            </tr>
+            <tr>
+                <td>4×<img src="~/assets/home.png"></td>
+                <td class="rent4">140$</td>
+            </tr>
+            <tr>
+                <td>5×<img src="~/assets/home.png"></td>
+                <td class="rent5">180$</td>
+            </tr>
+        </table>
+        <hr>
+        <table>
+            <tr>
+                <td>قیمت</td>
+                <td class="price">10$</td>
+            </tr>
+            <tr>
+                <td>ارزش</td>
+                <td class="now-price">20$</td>
+            </tr>
+            <tr>
+                <td>رهن</td>
+                <td class="mortgage">50$</td>
+            </tr>
+            <tr>
+                <td>آزاد</td>
+                <td class="unmortgage">180$</td>
+            </tr>
+            <tr>
+                <td>ساختن</td>
+                <td class="make">50$</td>
+            </tr>
+            <tr>
+                <td>تخریب</td>
+                <td class="unmake">25$</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div id="co-pattern">
+    <div class="logo">
+        <img src="">
+        <div class="name">پمپ بنزین</div>
+    </div>
+    <div class="price-info">
+        <table>
+            <tr>
+                <td>1×شرکت</td>
+                <td class="rent1">4×تاس</td>
+            </tr>
+            <tr>
+                <td>2×شرکت</td>
+                <td class="rent2">10×تاس</td>
+            </tr>
+            <tr>
+                <td>3×شرکت</td>
+                <td class="rent3">20×تاس</td>
+            </tr>
+            <tr>
+                <td>ارزش سهام</td>
+                <td class="excheng">10</td>
+            </tr>
+            <tr>
+                <td>قیمت</td>
+                <td class="price">10$</td>
+            </tr>
+            <tr>
+                <td>رهن</td>
+                <td class="mortgage">50$</td>
+            </tr>
+            <tr>
+                <td>آزاد</td>
+                <td class="unmortgage">180$</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div id="docs"></div>
+<div id="start-info" data-id="@room.Id" data-idr="@room.Numder" data-coin="@room.Coin"
+     data-pcount="@players" data-prebuy="@room.PreBuy" data-player="@player.Id">
+</div>
+<script src="~/Launch.js"></script>
+<script src="~/Game.js"></script>
+<script src="~/main.js"></script>

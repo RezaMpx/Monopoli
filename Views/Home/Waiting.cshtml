@@ -1,0 +1,76 @@
+﻿@inject MonoDB mono
+@model Player
+@{
+
+}
+<link rel="stylesheet" href="~/start.css">
+<span id="conn-state" class="conn-wait">🎲</span>
+@if (Model.IsAdmin)
+{
+    <div class="start">
+        <form action="/Home/Game" method="post">
+            <table>
+                <tbody>
+                    <tr>
+                        <td colspan="3"><span id="coin">مقدار سرمایه: 2000</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="min-val">500</span></td>
+                        <td><input type="range" name="coin" id="player-coin" value="2000" min="500" max="10000" step="100"></td>
+                        <td><span class="max-val">10000</span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <br>
+                            <hr><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><span>حداکثر زمین پیش‌خرید شده: <span id="prebuy">0</span></span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="min-val">0</span></td>
+                        <td><input name="prebuy" type="range" id="player-prebuy" value="0" min="0" max="12"></td>
+                        <td><span class="max-val" id="max-prebuy">12</span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <br>
+                            <hr><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><span>تعداد بازیکنان: <span id="range">1</span></span></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="range" id="player-range" value="1" min="1" max="6" disabled /></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input name="id" type="hidden" value="@Model.Id" hidden />
+                            <div id="sendwait"></div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <br />
+}
+<table>
+    <tr>
+        <th>بازیکنان 6/<span id="range2">-</span></th>
+    </tr>
+    <tbody id="player-list">
+        @foreach (var item in mono.Players.Where(m => m.Room == Model.Room).ToList())
+        {
+            <tr><td>@item.Name 🎮</td></tr>
+        }
+    </tbody>
+</table>
+<span class="none" id="searchid" data-id="@Model.Id" data-room="@Model.Room"></span>
+<script src="~/WaitingAjax.js"></script>
